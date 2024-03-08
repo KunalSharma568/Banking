@@ -40,7 +40,7 @@ public class UserServiceImpl implements UserService {
 		userRepository.save(savedUser);
 
 		logger.info("Account Number: " + savedUser.getAccountbean().getAccountNumber());
-		System.out.println(account.getUser().getName());
+		logger.info(account.getUser().getName());
 
 		return savedUser;
 	}
