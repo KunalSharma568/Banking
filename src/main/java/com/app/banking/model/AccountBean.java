@@ -25,7 +25,6 @@ public class AccountBean {
 	private String accountStatus;
 	
 	@OneToOne
-	@JoinColumn(name = "")
 	private User user;
 	
 	public AccountBean() {	
