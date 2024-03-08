@@ -64,7 +64,6 @@ public class AccountServiceImpl implements AccountService {
         transaction.setAmount(amount);
         transaction.setTransactionType("CASH_DEPOSIT");
         transaction.setTransactionDate(new Date());
-        //transaction.setSourceAccount(account);
         transactionRepository.save(transaction);
     }
 
