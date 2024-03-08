@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.app.banking.dao.AccountRepository;
+import com.app.banking.dao.TransactionRepository;
 import com.app.banking.exception.NotFoundException;
 import com.app.banking.model.AccountBean;
 import com.app.banking.model.Transaction;
@@ -21,6 +22,8 @@ public class AccountServiceImpl implements AccountService {
 	@Autowired
 	AccountRepository accountRepository;
 	
+	@Autowired
+	TransactionRepository transactionRepository;
 	
 	private static final Logger logger = LoggerFactory.getLogger(AccountServiceImpl.class);
 
