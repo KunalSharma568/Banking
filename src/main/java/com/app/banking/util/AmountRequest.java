@@ -1,6 +1,6 @@
 package com.app.banking.util;
 
-public class CashDepositRequest {
+public class AmountRequest {
 
 	private String accountNumber;
 	private double amount;

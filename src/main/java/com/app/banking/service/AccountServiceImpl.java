@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.app.banking.dao.AccountRepository;
 import com.app.banking.dao.TransactionRepository;
+import com.app.banking.exception.InsufficientBalanceException;
 import com.app.banking.exception.NotFoundException;
 import com.app.banking.model.AccountBean;
 import com.app.banking.model.Transaction;
@@ -66,5 +67,59 @@ public class AccountServiceImpl implements AccountService {
         transaction.setTransactionDate(new Date());
         transactionRepository.save(transaction);
     }
+	
+	@Override
+    public void cashWithdrawal(String accountNumber, double amount) {
+    	
+		AccountBean account = accountRepository.findByAccountNumber(accountNumber);
+        if (account == null) {
+            throw new NotFoundException("Account not found");
+        }
+        double totalBalance = account.getCurrentBalance() - amount;
+        account.setCurrentBalance(totalBalance);
+        accountRepository.save(account);
+
+        Transaction transaction = new Transaction();
+        transaction.setAmount(amount);
+        transaction.setTransactionType("CASH_WITHDRAWAL");
+        transaction.setTransactionDate(new Date());
+        transactionRepository.save(transaction);
+    }
+	
+	 @Override
+	    public void fundTransfer(String sourceAccountNumber, String targetAccountNumber, double amount) {
+	        AccountBean sourceAccount = accountRepository.findByAccountNumber(sourceAccountNumber);
+	        if (sourceAccount == null) {
+	            throw new NotFoundException("Source account not found");
+	        }
+
+	        AccountBean targetAccount = accountRepository.findByAccountNumber(targetAccountNumber);
+	        if (targetAccount == null) {
+	            throw new NotFoundException("Target account not found");
+	        }
+
+	        double sourceBalance = sourceAccount.getCurrentBalance();
+	        if (sourceBalance < amount) {
+	            throw new InsufficientBalanceException("Insufficient balance");
+	        }
+
+	        double newSourceBalance = sourceBalance - amount;
+	        sourceAccount.setCurrentBalance(newSourceBalance);
+	        accountRepository.save(sourceAccount);
+
+	        double targetBalance = targetAccount.getCurrentBalance();
+	        double newTargetBalance = targetBalance + amount;
+	        targetAccount.setCurrentBalance(newTargetBalance);
+	        accountRepository.save(targetAccount);
+
+	        Transaction transaction = new Transaction();
+	        transaction.setAmount(amount);
+	        transaction.setTransactionType("CASH_TRANSFER");
+	        transaction.setTransactionDate(new Date());
+	        transaction.setSourceAccount(sourceAccount);
+	        transaction.setTargetAccount(targetAccount);
+	        transactionRepository.save(transaction);
+	    }
+    
 
 }
