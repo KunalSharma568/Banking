@@ -18,12 +18,18 @@ public class Transaction {
 	private double amount;
 	private String transactionType;
 	private Date TransactionDate;
-	@ManyToOne
-	@JoinColumn(name = "")
+	/*
+	 * @ManyToOne
+	 * 
+	 * @JoinColumn(name = "")
+	 */
 	private AccountBean sourceAccount;
 
-	@ManyToOne
-	@JoinColumn(name = "")
+	/*
+	 * @ManyToOne
+	 * 
+	 * @JoinColumn(name = "")
+	 */
 	private AccountBean targetAccount;
 
 	public long getId() {

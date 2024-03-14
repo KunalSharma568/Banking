@@ -1,6 +1,7 @@
 package com.app.banking.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -8,17 +9,21 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.app.banking.model.AccountBean;
+import com.app.banking.model.Transaction;
 import com.app.banking.model.User;
 import com.app.banking.service.AccountService;
+import com.app.banking.service.TransactionService;
 import com.app.banking.util.AmountRequest;
 import com.app.banking.util.FundTransferRequest;
 import com.app.banking.util.LoggedInUserDetails;
+import com.app.banking.util.TransactionDTO;
 
 @RestController
 public class AccountController {
@@ -27,6 +32,9 @@ public class AccountController {
 
 	@Autowired
 	AccountService accountService;
+	
+	@Autowired
+	TransactionService transactionService;
 	
 	@RequestMapping(value="/accountCreation", method=RequestMethod.POST)
 	public AccountBean createAccount(@RequestBody User user){
@@ -78,11 +86,18 @@ public class AccountController {
 		}
 
 		accountService.fundTransfer(LoggedInUserDetails.getAccountNumber(), fundTransferRequest.getTargetAccountNumber(),
-				fundTransferRequest.getAmount());
+		 fundTransferRequest.getAmount());
 		Map<String, String> response = new HashMap<>();
 		response.put("msg", "Fund transferred successfully");
 
 		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+	
+	@GetMapping("/transactions")
+	public ResponseEntity<List<TransactionDTO>> getAllTransactionsByAccountNumber() {
+		List<TransactionDTO> transactions = transactionService
+				.getAllTransactionsByAccountNumber(LoggedInUserDetails.getAccountNumber());
+		return ResponseEntity.ok(transactions);
 	}
 
 }

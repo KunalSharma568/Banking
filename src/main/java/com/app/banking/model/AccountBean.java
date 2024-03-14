@@ -10,7 +10,7 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "", schema = "")
+@Table(name = "user", schema = "ksbank")
 public class AccountBean {
 
 	
@@ -24,7 +24,7 @@ public class AccountBean {
 	private String ifscCode;
 	private String accountStatus;
 	
-	@OneToOne
+	/*@OneToOne*/
 	private User user;
 	
 	public AccountBean() {	

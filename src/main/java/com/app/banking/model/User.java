@@ -25,7 +25,7 @@ public class User {
 	private String address;
 	private String mobileNumber;
 	
-	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+	/*@OneToOne(mappedBy = "user", cascade = CascadeType.ALL)*/
 	AccountBean accountbean;
 
 	public User() {}
